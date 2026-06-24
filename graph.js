@@ -27,8 +27,8 @@
 
   const nodes = GRAPH_DATA.nodes.map((n, i) => ({
     ...n,
-    x: W / 2 + (Math.random() - 0.5) * 400,
-    y: H / 2 + (Math.random() - 0.5) * 400,
+    x: W / 2 + (Math.random() - 0.5) * 800,
+    y: H / 2 + (Math.random() - 0.5) * 800,
     vx: 0, vy: 0,
     r: GROUP_RADIUS[n.group] || 6,
     fixed: false
@@ -60,13 +60,28 @@
   }
 
   // ---------- Force simulation (simple custom force-directed layout) ----------
-  const REPULSION = 2600;
-  const LINK_DIST = 90;
+  const REPULSION = 1600;        // было 2600 → уменьшаем хаос
+  const LINK_DIST = 260;
   const LINK_STRENGTH = 0.02;
-  const CENTER_STRENGTH = 0.0006;
-  const DAMPING = 0.86;
+  const CENTER_STRENGTH = 0.00025;
+  const DAMPING = 0.72;          // было 0.86 → сильнее затухание
 
+  const pauseBtn = document.getElementById('pause-btn');
+
+  pauseBtn.addEventListener('click', () => {
+    paused = !paused;
+
+    pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
+  });
+
+  // 🔥 новое: "остывание системы"
+  let temperature = 1.0;
+  const COOLING = 0.992;
+
+  let paused = false;
+  
   function step() {
+    const forceScale = temperature;
     // Repulsion between all pairs (n is small enough, ~25 nodes, O(n^2) is fine)
     for (let i = 0; i < nodes.length; i++) {
       const a = nodes[i];
@@ -79,8 +94,8 @@
         const force = REPULSION / distSq;
         const fx = (dx / dist) * force;
         const fy = (dy / dist) * force;
-        if (!a.dragging) { a.vx += fx; a.vy += fy; }
-        if (!b.dragging) { b.vx -= fx; b.vy -= fy; }
+        if (!a.dragging) { a.vx += fx * forceScale; a.vy += fy * forceScale; }
+        if (!b.dragging) { b.vx -= fx * forceScale; b.vy -= fy * forceScale; }
       }
     }
 
@@ -92,8 +107,8 @@
       const diff = (dist - LINK_DIST) * LINK_STRENGTH;
       const fx = (dx / dist) * diff;
       const fy = (dy / dist) * diff;
-      if (!a.dragging) { a.vx += fx; a.vy += fy; }
-      if (!b.dragging) { b.vx -= fx; b.vy -= fy; }
+      if (!a.dragging) { a.vx += fx * forceScale; a.vy += fy * forceScale; }
+      if (!b.dragging) { b.vx -= fx * forceScale; b.vy -= fy * forceScale; }
     });
 
     // Weak centering force so the graph doesn't drift away
@@ -101,8 +116,8 @@
       if (n.dragging) return;
       const dx = (W / 2) - n.x;
       const dy = (H / 2) - n.y;
-      n.vx += dx * CENTER_STRENGTH;
-      n.vy += dy * CENTER_STRENGTH;
+      n.vx += dx * CENTER_STRENGTH * forceScale;
+      n.vy += dy * CENTER_STRENGTH * forceScale;
     });
 
     // Integrate
@@ -113,6 +128,12 @@
       n.x += n.vx;
       n.y += n.vy;
     });
+
+    temperature *= COOLING;
+
+    if (temperature < 0.02) {
+      temperature = 0.02; // не даём полностью "замереть"
+    }
   }
 
   // ---------- Rendering ----------
@@ -191,7 +212,9 @@
   }
 
   function loop() {
-    step();
+    if (!paused) {
+      step();
+    }
     draw();
     requestAnimationFrame(loop);
   }
