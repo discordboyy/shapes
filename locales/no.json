@@ -1,0 +1,26 @@
+{
+  "geometry_map": "Geometrikart",
+  "graph_title": "Figurgraf",
+  "graph_description": "Plane figurer som et nettverk av forbindelser. Dra noder og klikk på dem for å utforske egenskaper og formler.",
+
+  "root": "Rot",
+  "category": "Kategori",
+  "shape": "Figur",
+
+  "pause": "⏸ Pause",
+  "resume": "▶ Fortsett",
+
+  "zoom_hint": "Musehjul — zoom · Dra bakgrunnen — panorering",
+
+  "figure": "Figur",
+  "area": "Areal",
+  "perimeter": "Omkrets",
+  "related_shapes": "Relaterte figurer",
+
+  "close": "Lukk",
+
+  "nodes": "noder",
+  "links": "koblinger",
+
+  "node_count": "{nodes} noder · {links} forbindelser"
+}

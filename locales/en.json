@@ -1,0 +1,26 @@
+{
+  "geometry_map": "Geometry Map",
+  "graph_title": "Shape Graph",
+  "graph_description": "Plane figures represented as a network. Drag nodes and click them to explore properties and formulas.",
+
+  "root": "Root",
+  "category": "Category",
+  "shape": "Shape",
+
+  "pause": "⏸ Pause",
+  "resume": "▶ Resume",
+
+  "zoom_hint": "Mouse wheel — zoom · Drag background — pan",
+
+  "figure": "Shape",
+  "area": "Area",
+  "perimeter": "Perimeter",
+  "related_shapes": "Related Shapes",
+
+  "close": "Close",
+
+  "nodes": "nodes",
+  "links": "links",
+
+  "node_count": "{nodes} nodes · {links} links"
+}

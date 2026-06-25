@@ -46,8 +46,13 @@
   nodeById['root'].x = W / 2;
   nodeById['root'].y = H / 2;
 
-  document.getElementById('node-count').textContent =
-    `${nodes.length} узлов · ${links.length} связей`;
+  document.addEventListener("i18n-ready", () => {
+    document.getElementById("node-count").textContent =
+      t("node_count", {
+        nodes: nodes.length,
+        links: links.length
+      });
+  });
 
   // ---------- Camera (pan & zoom) ----------
   const camera = { x: 0, y: 0, scale: 1 };

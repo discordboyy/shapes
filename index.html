@@ -296,14 +296,14 @@
 
 <header>
   <div class="brand">
-    <span class="eyebrow">Карта геометрии</span>
-    <h1>Граф фигур</h1>
-    <p>Плоские фигуры как сеть связей. Перетаскивайте узлы, кликайте — чтобы увидеть свойства и формулы.</p>
+    <span class="eyebrow" data-i18n="geometry_map"></span>
+    <h1 data-i18n="graph_title"></h1>
+    <p data-i18n="graph_description"></p>
   </div>
   <div class="legend">
-    <div class="row"><span>Корень</span><span class="dot" style="background:#7b7fff"></span></div>
-    <div class="row"><span>Категория</span><span class="dot" style="background:#c9cad1"></span></div>
-    <div class="row"><span>Фигура</span><span class="dot" style="background:#6b6d78"></span></div>
+    <div class="row"><span data-i18n="root"></span><span class="dot" style="background:#7b7fff"></span></div>
+    <div class="row"><span data-i18n="category"></span><span class="dot" style="background:#c9cad1"></span></div>
+    <div class="row"><span data-i18n="shape"></span><span class="dot" style="background:#6b6d78"></span></div>
     <button id="pause-btn"
       style="
         pointer-events:auto;
@@ -322,24 +322,24 @@
 </header>
 
 <footer>
-  <div class="hint">Колесо мыши — масштаб · Перетаскивание фона — панорама</div>
+  <div class="hint" data-i18n="zoom_hint"></div>
   <div class="count" id="node-count"></div>
 </footer>
 
 <div id="panel">
   <button class="close-btn" id="close-panel" aria-label="Закрыть">✕</button>
   <div class="shape-render" id="shape-render"></div>
-  <span class="eyebrow" id="panel-eyebrow">Фигура</span>
+  <span class="eyebrow" id="panel-eyebrow" data-i18n="figure"></span>
   <h2 id="panel-title">—</h2>
   <p class="desc" id="panel-desc"></p>
 
   <div class="formula-block" id="area-block" style="display:none;">
-    <span class="label">Площадь</span>
+    <span class="label" data-i18n="area"></span>
     <div class="formula" id="area-formula"></div>
   </div>
 
   <div class="formula-block" id="perimeter-block" style="display:none;">
-    <span class="label">Периметр</span>
+    <span class="label" data-i18n="perimeter"></span>
     <div class="formula" id="perimeter-formula"></div>
   </div>
 
@@ -351,9 +351,10 @@
   </div>
 </div>
 
+<script src="i18n.js"></script>
 <script src="data.js"></script>
+<script src="graph.js"></script>
 <!-- <script src="quiz-data.js"></script>
 <script src="quiz.js"></script> -->
-<script src="graph.js"></script>
 </body>
 </html>
