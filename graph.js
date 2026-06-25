@@ -57,6 +57,50 @@
   // ---------- Camera (pan & zoom) ----------
   const camera = { x: 0, y: 0, scale: 1 };
 
+  const cameraAnim = {
+    active: false,
+    startX: 0,
+    startY: 0,
+    targetX: 0,
+    targetY: 0,
+    startTime: 0,
+    duration: 700
+  };
+
+  function easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function centerOnNode(node) {
+    const panelWidth =
+      panel.classList.contains('open') ? panel.offsetWidth : 0;
+
+    const screenCenterX = (W - panelWidth) / 2;
+    const screenCenterY = H / 2;
+
+    // куда хотим попасть в screen space
+    const targetScreen = { x: screenCenterX, y: screenCenterY };
+
+    // текущая позиция узла в screen space
+    const nodeScreen = worldToScreen(node.x, node.y);
+
+    cameraAnim.active = true;
+    cameraAnim.startX = camera.x;
+    cameraAnim.startY = camera.y;
+
+    // двигаем камеру НА разницу в screen space,
+    // но переводим обратно в world-space через scale
+    cameraAnim.targetX =
+      camera.x + (targetScreen.x - nodeScreen.x) / camera.scale;
+
+    cameraAnim.targetY =
+      camera.y + (targetScreen.y - nodeScreen.y) / camera.scale;
+
+    cameraAnim.startTime = performance.now();
+  }
+
   function screenToWorld(sx, sy) {
     return {
       x: (sx - W / 2) / camera.scale + W / 2 - camera.x,
@@ -152,6 +196,30 @@
     };
   }
 
+  function updateCameraAnimation() {
+    if (!cameraAnim.active) return;
+
+    const elapsed =
+      performance.now() - cameraAnim.startTime;
+
+    let t = elapsed / cameraAnim.duration;
+
+    if (t >= 1) {
+      t = 1;
+      cameraAnim.active = false;
+    }
+
+    const k = easeInOutCubic(t);
+
+    camera.x =
+      cameraAnim.startX +
+      (cameraAnim.targetX - cameraAnim.startX) * k;
+
+    camera.y =
+      cameraAnim.startY +
+      (cameraAnim.targetY - cameraAnim.startY) * k;
+  }
+
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
@@ -220,6 +288,8 @@
     if (!paused) {
       step();
     }
+    updateCameraAnimation(); // ← новое
+
     draw();
     requestAnimationFrame(loop);
   }
@@ -429,6 +499,9 @@
 
   function selectNode(n) {
     selectedNode = n;
+
+    centerOnNode(n);
+
     openPanel(n);
   }
 
